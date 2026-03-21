@@ -6,4 +6,4 @@ For start:git clone start index.html
 
 
              
-![Calculator Demo](https://github.com/kreozik/calculator/demo.gif)
+![Calculator Demo](https://github.com/kreozik/calculator/blob/main/demo.gif)
