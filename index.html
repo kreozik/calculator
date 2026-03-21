@@ -39,12 +39,6 @@
         let display = document.getElementById('display');
         let currentInput = '0';
 
-        function canAddDot(input) {
-            const parts = input.replace(/×/g, '*').split(/[\+\-\*\/]/);
-            const lastPart = parts[parts.length - 1];
-            return !lastPart.includes('.');
-        }
-
         function updateDisplay() {
             display.textContent = currentInput;
         }
@@ -64,17 +58,32 @@
         }
 
         function appendToDisplay(value) {
+            const lastChar = currentInput.slice(-1);
+            
             if (currentInput === '0' && value !== '.') {
                 currentInput = value;
             } else if (currentInput === 'Error') {
                 currentInput = value;
             } else {
-                if (value === '.' && !canAddDot(currentInput)) {
-                    return;
+                if (value === '.') {
+                    if (!canAddDot(currentInput)) return;
+                } else if (['+', '-', '×', '/'].includes(value)) {
+                    if (lastChar === '.') return;
+                    if (lastChar === '+' || lastChar === '-' || lastChar === '×' || lastChar === '/') return;
                 }
+                
                 currentInput += value;
             }
             updateDisplay();
+        }
+
+        function canAddDot(input) {
+            const operators = /[\+\-\*\/]/g;
+            const lastOperatorIndex = input.search(operators);
+            const lastPart = lastOperatorIndex >= 0 ? input.slice(lastOperatorIndex + 1) : input;
+            
+            const dotCount = (lastPart.match(/\./g) || []).length;
+            return dotCount === 0;
         }
 
         function calculate() {
