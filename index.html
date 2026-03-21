@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button class="clear btn-c" onclick="clearDisplay()">C</button>
+            <button class="clear btn-backspace" onclick="deleteLast()">⌫</button>
+            <button class="operator btn-divide" onclick="appendToDisplay('/')">/</button>
+            
+            <button class="number btn-7" onclick="appendToDisplay('7')">7</button>
+            <button class="number btn-8" onclick="appendToDisplay('8')">8</button>
+            <button class="number btn-9" onclick="appendToDisplay('9')">9</button>
+            <button class="operator btn-multiply" onclick="appendToDisplay('×')">×</button>
+            
+            <button class="number btn-4" onclick="appendToDisplay('4')">4</button>
+            <button class="number btn-5" onclick="appendToDisplay('5')">5</button>
+            <button class="number btn-6" onclick="appendToDisplay('6')">6</button>
+            <button class="operator btn-minus" onclick="appendToDisplay('-')">-</button>
+            
+            <button class="number btn-1" onclick="appendToDisplay('1')">1</button>
+            <button class="number btn-2" onclick="appendToDisplay('2')">2</button>
+            <button class="number btn-3" onclick="appendToDisplay('3')">3</button>
+            <button class="operator btn-plus" onclick="appendToDisplay('+')">+</button>
+            
+            <button class="number btn-0" onclick="appendToDisplay('0')">0</button>
+            <button class="number btn-dot" onclick="appendToDisplay('.')">.</button>
+            <button class="equals btn-equals" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let currentInput = '0';
+
+        function updateDisplay() {
+            display.textContent = currentInput;
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = '0';
+            }
+            updateDisplay();
+        }
+
+        function appendToDisplay(value) {
+            if (currentInput === '0' && value !== '.') {
+                currentInput = value;
+            } else if (currentInput === 'Error') {
+                currentInput = value;
+            } else {
+                currentInput += value;
+            }
+            updateDisplay();
+        }
+
+        function calculate() {
+            try {
+                let expression = currentInput.replace(/×/g, '*');
+                let result = eval(expression);
+                
+                if (!isFinite(result)) {
+                    throw new Error('Invalid');
+                }
+                
+                currentInput = String(Math.round(result * 100000000) / 100000000);
+                
+            } catch {
+                currentInput = 'Error';
+            }
+            updateDisplay();
+        }
+
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            
+            if (key >= '0' && key <= '9') {
+                appendToDisplay(key);
+            } else if (key === '.') {
+                appendToDisplay('.');
+            } else if (key === '+') {
+                appendToDisplay('+');
+            } else if (key === '-') {
+                appendToDisplay('-');
+            } else if (key === '*') {
+                appendToDisplay('×');
+            } else if (key === '/') {
+                appendToDisplay('/');
+            } else if (key === 'Enter' || key === '=') {
+                event.preventDefault();
+                calculate();
+            } else if (key === 'Escape' || key.toLowerCase() === 'c') {
+                clearDisplay();
+            } else if (key === 'Backspace') {
+                deleteLast();
+            }
+        });
+
+        updateDisplay();
+    </script>
+</body>
+</html>
