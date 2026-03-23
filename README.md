@@ -4,7 +4,7 @@ Frontend: HTML, CSS, JavaScript
 
 For start:git clone start index.html
 
-Deploy link: https://kreozik.github.io/calculator/
+Deploy link: https://calculator-production-a604.up.railway.app/
 
 
              
